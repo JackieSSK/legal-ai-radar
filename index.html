@@ -6,7 +6,7 @@
   <meta name="description" content="LEGAL AI RADAR - 法律 × AI × 合规 资讯雷达，聚焦个人信息保护、数据合规、AIGC 监管、重大判决与域外法。">
   <title>LEGAL AI RADAR · 法律 AI 合规资讯雷达</title>
 
-  <!-- Google Fonts: Tektur (标题) + Chakra Petch (正文) + Space Mono (代码/数字) -->
+  <!-- Google Fonts: Tektur(英文标题) + Chakra Petch(英文正文) + Space Mono(数字/代码) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;700;900&family=Chakra+Petch:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -16,9 +16,6 @@
 </head>
 <body>
 
-  <!-- 背景星空 Canvas -->
-  <canvas id="bg-stars"></canvas>
-
   <!-- 顶栏 -->
   <header class="topbar">
     <div class="topbar-inner">
@@ -26,25 +23,40 @@
         <h1>LEGAL AI RADAR</h1>
         <div class="subtitle">// 法律 × AI × 合规 资讯雷达 //</div>
         <div class="badge-row">
-          <span class="badge pink">CYBER LAW</span>
-          <span class="badge cyan">DATA COMPLIANCE</span>
-          <span class="badge">AIGC REGULATION</span>
+          <span class="badge cyan">CYBER LAW</span>
+          <span class="badge pink">DATA COMPLIANCE</span>
+          <span class="badge cyan">AIGC REGULATION</span>
         </div>
       </div>
-      <button id="refresh-btn" class="refresh-btn" type="button">REFRESH</button>
+
+      <!-- 工具栏：搜索 + 视图切换 + 刷新 -->
+      <div class="toolbar">
+        <div class="search-box">
+          <input id="search-input" class="search-input" type="text" placeholder="搜索 / Search title, tag, basis...">
+        </div>
+        <div class="view-toggle" role="group" aria-label="view toggle">
+          <button class="view-btn" data-view="card" type="button">🃏 卡片</button>
+          <button class="view-btn" data-view="list" type="button">📋 列表</button>
+        </div>
+        <button id="refresh-btn" class="refresh-btn" type="button">REFRESH</button>
+      </div>
     </div>
 
-    <!-- 统计条 -->
+    <!-- 统计条（4 卡，favs 卡可点击切换"仅看收藏"） -->
     <div class="stats-bar">
-      <div class="stat-card pink">
+      <div class="stat-card cyan">
         <div class="label">// TOTAL ENTRIES</div>
         <div class="value" id="stat-total">000</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card pink">
         <div class="label">// TODAY NEW</div>
         <div class="value" id="stat-today">+00</div>
       </div>
-      <div class="stat-card cyan">
+      <div class="stat-card yellow" id="stat-favs-card" style="cursor:pointer" title="点击切换：仅看收藏">
+        <div class="label">// ⭐ FAVORITES</div>
+        <div class="value" id="stat-favs">00</div>
+      </div>
+      <div class="stat-card">
         <div class="label">// LAST UPDATE</div>
         <div class="value small" id="stat-updated">--</div>
       </div>
@@ -54,6 +66,9 @@
   <!-- 分类 Tab -->
   <nav id="tabs" class="tabs"></nav>
 
+  <!-- 当前过滤状态条 -->
+  <div id="filter-status" class="filter-status" style="display:none"></div>
+
   <!-- 卡片网格 -->
   <main id="cards-grid" class="cards-grid">
     <div class="loading"></div>
@@ -62,14 +77,14 @@
   <!-- 页脚 -->
   <footer class="footer">
     <div class="line">▎本站为<span class="pulse"> 预 览 样 例 </span>· 数据为 DEMO · 不构成法律意见</div>
-    <div class="line">▎即将由 <span style="color:var(--neon-cyan)">GitHub Actions + LLM</span> 自动更新 · LEGAL AI RADAR © 2026</div>
+    <div class="line">▎LEGAL AI RADAR © 2026 · Powered by GitHub Pages</div>
     <div class="line" style="margin-top:8px;font-size:10px;opacity:0.6;">⚠️ AI 生成内容仅供参考，不构成专业法律意见，不替代执业律师建议。</div>
   </footer>
 
-  <!-- 内嵌 fallback 数据：双击 file:// 打开时使用，避免 CORS 报错 -->
+  <!-- 内嵌 fallback 数据：file:// 协议双击打开时使用 -->
   <script id="fallback-data" type="application/json">
 {
-  "updated": "2026-06-12 23:30:00",
+  "updated": "2026-06-13 01:00:00",
   "total": 15,
   "today_new": 3,
   "items": [
@@ -81,6 +96,8 @@
       "summary": "依据《个人信息保护合规审计管理办法》（2026 年 5 月 1 日施行），网信办近期公示首批专业审计机构推荐目录，覆盖律师事务所、会计师事务所及第三方测评机构，为重点行业大型平台开展合规审计提供选择参考。",
       "date": "2026-06-12",
       "category": "personal-info",
+      "risk_level": "medium",
+      "tags": ["互联网平台", "数据合规", "律所业务"],
       "analysis": {
         "legal_basis": "《个人信息保护法》第 54、64 条；《个人信息保护合规审计管理办法》第 8、12 条",
         "practical_impact": "处理 1000 万人以上个人信息的处理者须每两年开展一次合规审计；律师事务所可作为外部审计主体承接业务，律师在数据合规业务中的角色由咨询走向受监管认可的鉴证服务，需配套建设审计底稿与质量控制流程。"
@@ -94,6 +111,8 @@
       "summary": "上海市委网信办近期公开通报，某互联网企业未按规定指定个人信息保护负责人并向网信部门备案，且在企业架构调整后未及时更新备案信息，被责令整改并处罚款 280 万元。",
       "date": "2026-06-11",
       "category": "personal-info",
+      "risk_level": "high",
+      "tags": ["互联网平台", "执法案例", "DPO 备案"],
       "analysis": {
         "legal_basis": "《个人信息保护法》第 52 条；《个人信息保护负责人备案管理办法（试行）》",
         "practical_impact": "合规官（DPO）备案不再仅是形式申报，监管开始关注备案信息的真实性与持续性。法务、合规部门需将合规官变更纳入工商变更联动 SOP，避免组织调整中出现备案断点。"
@@ -107,6 +126,8 @@
       "summary": "最高检发布第八批个人信息保护公益诉讼典型案例，涵盖人脸识别滥用、儿童个人信息处理、AI 换脸黑产等场景，明确平台过错的认定标准与连带责任边界。",
       "date": "2026-06-09",
       "category": "personal-info",
+      "risk_level": "medium",
+      "tags": ["人脸识别", "AI 换脸", "平台经济"],
       "analysis": {
         "legal_basis": "《个人信息保护法》第 70 条；《民事诉讼法》第 58 条",
         "practical_impact": "公益诉讼成为个保执法的重要补充路径，企业应将检察机关公益诉讼风险纳入合规风险图谱；涉 AI 换脸、人脸识别业务线需重新评估告知同意的明示性与单独同意的取得方式。"
@@ -120,6 +141,10 @@
       "summary": "修订版细化标准合同适用阈值、补充自由贸易试验区负面清单衔接条款，并新增 AI 训练数据跨境传输的专项尽职调查要求，过渡期至 2026 年 12 月 31 日。",
       "date": "2026-06-10",
       "category": "data-compliance",
+      "risk_level": "high",
+      "tags": ["数据跨境", "AI 训练", "出海"],
+      "key_date": "2026-12-31",
+      "key_date_label": "过渡期截止",
       "analysis": {
         "legal_basis": "《个人信息保护法》第 38 条；《数据出境安全评估办法》《个人信息出境标准合同办法》",
         "practical_impact": "出海企业需在过渡期内完成存量标准合同的版本升级与重新备案；AI 模型训练涉及境外算力或语料的，应单独编制数据传输影响评估（PIPIA + DTIA），律师在尽调与备案文本中的工作量将显著上升。"
@@ -133,6 +158,8 @@
       "summary": "临港新片区将一般数据清单扩展至生物医药、智能网联汽车、跨境金融三大行业子目录，清单内数据可不经安全评估或标准合同直接出境，企业可按目录自评估后申报。",
       "date": "2026-06-08",
       "category": "data-compliance",
+      "risk_level": "medium",
+      "tags": ["生物医药", "智能网联汽车", "自贸区", "跨境金融"],
       "analysis": {
         "legal_basis": "《促进和规范数据跨境流动规定》第 6 条；临港新片区数据跨境流动管理办法",
         "practical_impact": "自贸区负面清单/一般数据清单成为跨境合规的'快速通道'。法务在选址、设立、并购架构设计阶段应将数据出境路径作为关键考量；建议建立行业子目录与企业实际数据流的映射表。"
@@ -146,6 +173,8 @@
       "summary": "两部门发布联合通知，明确赴港、赴美 IPO 项目中网络安全审查与证监会备案的衔接时点，要求保荐机构在递表前完成数据出境路径自评估并出具专项法律意见。",
       "date": "2026-06-06",
       "category": "data-compliance",
+      "risk_level": "high",
+      "tags": ["中概股", "IPO", "数据出境", "资本市场"],
       "analysis": {
         "legal_basis": "《网络安全审查办法》第 7 条；《境内企业境外发行证券和上市管理试行办法》",
         "practical_impact": "数据安全审查正式嵌入境外 IPO 主流程，资本市场律师与数据合规律师协同作业成为标配；保荐法律意见书需新增数据合规专章，建议提前 3-6 个月启动专项尽调。"
@@ -159,6 +188,8 @@
       "summary": "第十二批备案新增 426 项深度合成与生成式 AI 算法，首次将企业内部部署的行业大模型（如法律、医疗）纳入强制备案范围，并要求标注训练语料来源类型。",
       "date": "2026-06-12",
       "category": "aigc-regulation",
+      "risk_level": "medium",
+      "tags": ["生成式 AI", "行业大模型", "法律科技", "医疗 AI"],
       "analysis": {
         "legal_basis": "《互联网信息服务深度合成管理规定》第 19 条；《生成式人工智能服务管理暂行办法》第 17 条",
         "practical_impact": "B 端行业大模型备案义务正式落地，律所自建/外采的法律 AI 工具若面向客户提供生成内容服务，亦可能触发备案。建议技术法务部门梳理在用 AI 系统清单，区分自用/对外提供两类法律风险。"
@@ -172,6 +203,10 @@
       "summary": "细则明确显式标识与隐式标识的技术规范（GB/T 45438-2026），要求平台对疑似 AI 生成内容进行二次提示，并对未标识传播行为追究上传者与平台的连带责任。",
       "date": "2026-06-07",
       "category": "aigc-regulation",
+      "risk_level": "high",
+      "tags": ["AIGC", "内容平台", "UGC", "水印技术"],
+      "key_date": "2026-12-07",
+      "key_date_label": "工程改造期截止",
       "analysis": {
         "legal_basis": "《人工智能生成合成内容标识办法》第 4、10 条；GB/T 45438-2026",
         "practical_impact": "平台运营方需在 6 个月内完成隐式水印（C2PA 兼容）与显式标识的工程化改造；UGC 平台的内容审核 SOP 需增加 AI 标识检测节点，未尽审核义务可能被认定为帮助侵权。"
@@ -185,6 +220,10 @@
       "summary": "备案系统改版后，企业须就未成年人模式的算法策略、内容池隔离、防沉迷机制提交独立说明文件；存量备案企业需在 90 天内完成补充申报。",
       "date": "2026-06-05",
       "category": "aigc-regulation",
+      "risk_level": "high",
+      "tags": ["未成年人保护", "算法推荐", "内容池治理"],
+      "key_date": "2026-09-03",
+      "key_date_label": "存量补充申报截止",
       "analysis": {
         "legal_basis": "《互联网信息服务算法推荐管理规定》第 18 条；《未成年人网络保护条例》第 42 条",
         "practical_impact": "未成年人保护从用户协议条款向算法层延伸，法务需协同产品、算法团队完成'未成年人模式'技术方案的法律映射；存量算法备案需重新审视，避免逾期被列入异常名单。"
@@ -198,6 +237,8 @@
       "summary": "白皮书披露 AI 辅助审判系统在类案推送、裁判文书生成、证据链分析三大场景的应用数据，强调'AI 仅作辅助，裁判权属于法官'的边界原则，并公布算法可解释性评估框架。",
       "date": "2026-06-11",
       "category": "legal-judgment",
+      "risk_level": "info",
+      "tags": ["司法 AI", "审判辅助", "算法可解释性"],
       "analysis": {
         "legal_basis": "《最高人民法院关于规范和加强人工智能司法应用的意见》（法发〔2022〕33 号）",
         "practical_impact": "AI 辅助生成的裁判文书初稿在事实认定环节的影响力日益凸显，律师在举证、质证策略上需考虑 AI 系统的输入偏好；对当事人而言，算法可解释性报告或将成为再审/上诉的新论据。"
@@ -211,6 +252,8 @@
       "summary": "法院支持小股东查阅数据资产估值底稿与第三方评估报告的请求，认定数据资产作为表内项目，其形成过程与权属证明属于股东知情权审查范围，判决具有标志性意义。",
       "date": "2026-06-09",
       "category": "legal-judgment",
+      "risk_level": "medium",
+      "tags": ["公司治理", "数据资产", "股东权益"],
       "analysis": {
         "legal_basis": "《公司法》第 57 条；财政部《企业数据资源相关会计处理暂行规定》",
         "practical_impact": "数据资产入表后，公司治理层面的合规要求显著提升；公司法律顾问需协助董事会完善数据资产估值底稿、权属证明、合规链路文档，未来类似纠纷将集中爆发。"
@@ -224,6 +267,8 @@
       "summary": "指导意见明确利用 AI 伪造证据、批量生成诉状、虚构法律关系等行为的定罪量刑标准，要求法院建立 AI 生成证据识别与质证规则，公安机关配合开展专项打击。",
       "date": "2026-06-04",
       "category": "legal-judgment",
+      "risk_level": "high",
+      "tags": ["AI 证据", "虚假诉讼", "律所风控"],
       "analysis": {
         "legal_basis": "《刑法》第 307 条之一虚假诉讼罪；《最高人民法院关于民事诉讼证据的若干规定》第 94 条",
         "practical_impact": "代理律师需对当事人提交的证据材料负更高审查义务，对疑似 AI 生成的合同、聊天记录、邮件应主动申请鉴定；律所宜建立 AI 内容溯源工具的技术储备。"
@@ -237,6 +282,10 @@
       "summary": "GPAI Code of Practice 最终稿涵盖透明度、版权合规、系统性风险评估三大模块，签署该准则的提供者可推定符合 AI Act 第 53 条义务，未签署方需自证合规。",
       "date": "2026-06-10",
       "category": "cross-border",
+      "risk_level": "high",
+      "tags": ["出海欧盟", "GPAI", "EU AI Act"],
+      "key_date": "2026-08-02",
+      "key_date_label": "评估签署截止",
       "analysis": {
         "legal_basis": "EU AI Act (Regulation 2024/1689) Article 53、56；GPAI Code of Practice (2026 Final)",
         "practical_impact": "中国大模型厂商出海欧盟须在 2026 年 8 月 2 日前评估是否签署 GPAI Code；建议国际法务团队同步建立 AI Act 与中国《生成式 AI 管理办法》的合规映射表，避免双重义务冲突。"
@@ -250,6 +299,8 @@
       "summary": "新规要求在美上市的中国公司在 20-F 表格中专项披露 AI 模型对业务的实质影响、重大网络安全事件及数据跨境监管风险，违规将影响审计底稿审查 PCAOB 评级。",
       "date": "2026-06-08",
       "category": "cross-border",
+      "risk_level": "high",
+      "tags": ["中概股", "信披合规", "网络安全"],
       "analysis": {
         "legal_basis": "Securities Exchange Act of 1934 §13(a)；SEC Final Rule on Cybersecurity Risk Management (33-11216)",
         "practical_impact": "中概股年报披露口径需在中美监管之间寻找平衡：既要满足 SEC 的实质性披露义务，又不能违反《数据安全法》《保密法》对跨境提供数据的限制。资本市场律师与数据合规律师须深度联动。"
@@ -263,6 +314,8 @@
       "summary": "PDPA 2026 修订版新增 AI 训练数据使用的'合法商业利益'例外、自动化决策的解释权义务，并强化对生成式 AI 输出物中个人信息的处理规则，与中国《个保法》形成差异。",
       "date": "2026-06-03",
       "category": "cross-border",
+      "risk_level": "medium",
+      "tags": ["东南亚", "AI 治理", "区域合规"],
       "analysis": {
         "legal_basis": "Singapore PDPA (Amended 2026) Part VIA；Model AI Governance Framework v3",
         "practical_impact": "东南亚业务布局的中资企业需重新审视新加坡区域数据中心的 AI 训练合规边界；建议在区域总部所在地设立专项 AI 治理委员会，统一对接东盟各国的监管差异。"
